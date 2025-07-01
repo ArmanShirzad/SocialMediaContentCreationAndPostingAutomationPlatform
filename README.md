@@ -7,7 +7,15 @@ SocialMediaContentCreationAndPostingAutomationPlatform is an automated content p
 - **Automated Scraping:** Fetches the latest articles from a source in this case is the beloved renowned TechCrunch.
 - **Translation:** Translates articles to Persian using LLM-powered translation. u can change just the prompt in groqtranslator.py
 - **Summarization:** Summarizes content for social media platforms. each have a limit and the limits and constraints are commented. 
-- **Video Generation:** Creates videos from article content using stock images or footage.
+- **Video Generation:** Creates videos from article content using stock images or footage. generated videos can be seen at https://www.youtube.com/@techcrunchfarsi/shorts
+- **audio Generation:** Creates audio voice over from article content using tts feature. explained more at overview of workflow overview section. sample generated audios are like below.
+- <audio controls>
+  <source src="./assets/sample%20audio.m4a" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+[▶️ Listen](./assets/sample%20audio.m4a)
+
 - **Multi-Platform Posting:** Posts to YouTube, Telegram, X (Twitter), and optionally Instagram.
 - **Queue & Rate Limiting:** Handles Instagram posting asynchronously with rate limits.
 - **Database Tracking:** Tracks which articles have been posted to which platforms.
