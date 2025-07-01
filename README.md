@@ -14,7 +14,7 @@ SocialMediaContentCreationAndPostingAutomationPlatform is an automated content p
   Your browser does not support the audio element.
 </audio>
 
-[▶️ Listen](./assets/sample%20audio.m4a)
+[▶️ Listen](./assets/sample%20audio.mp4)
 
 - **Multi-Platform Posting:** Posts to YouTube, Telegram, X (Twitter), and optionally Instagram.
 - **Queue & Rate Limiting:** Handles Instagram posting asynchronously with rate limits.
