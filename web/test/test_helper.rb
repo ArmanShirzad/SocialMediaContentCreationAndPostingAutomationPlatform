@@ -9,3 +9,25 @@ module ActiveSupport
     fixtures :all
   end
 end
+
+class ActionDispatch::IntegrationTest
+  def auth_headers
+    credentials = ActionController::HttpAuthentication::Basic.encode_credentials("admin", "changeme")
+    { "HTTP_AUTHORIZATION" => credentials }
+  end
+
+  def get(path, **opts)
+    opts[:headers] = (opts[:headers] || {}).merge(auth_headers)
+    super
+  end
+
+  def post(path, **opts)
+    opts[:headers] = (opts[:headers] || {}).merge(auth_headers)
+    super
+  end
+
+  def patch(path, **opts)
+    opts[:headers] = (opts[:headers] || {}).merge(auth_headers)
+    super
+  end
+end

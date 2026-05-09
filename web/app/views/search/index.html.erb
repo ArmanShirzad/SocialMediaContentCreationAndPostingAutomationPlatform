@@ -69,7 +69,7 @@
               </div>
             </div>
             <div class="flex gap-2 shrink-0">
-              <% existing = Article.find_by(url: result[:url]) %>
+              <% existing = @existing_articles[result[:url]] %>
               <% if existing&.translated? %>
                 <%= link_to new_card_news_path(article_id: existing.id),
                     class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-success-muted text-success whitespace-nowrap" do %>

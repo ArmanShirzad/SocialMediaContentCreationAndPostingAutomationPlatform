@@ -6,7 +6,6 @@ from test_x_posting import XPoster
 from translator import GroqTranslator
 # from chatgptTranslator import ChatGPTTranslator
 from database import ArticleDatabase
-from logger import log_to_file
 from instagram_poster import InstagramPoster
 import os
 import aiohttp
@@ -32,18 +31,6 @@ async def main():
     if not await instagram_poster.login():
         print("Failed to login to Instagram")
         return
-
-    # Add these error patterns at the top of main()
-    error_patterns = [
-        "An unexpected error occurred",
-        "Please try again later",
-        "یک خطای غیرمنتظره رخ داد",
-        "لطفاً بعداً دوباره تلاش کنید"
-    ]
-
-    def contains_error_message(text):
-        """Check if the text contains any error patterns"""
-        return any(pattern in text for pattern in error_patterns)
 
     # Start Instagram queue processing
     await instagram_poster.start_queue_processing()

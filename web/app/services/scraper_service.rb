@@ -7,7 +7,8 @@ class ScraperService
       raise "Python 환경 또는 scraper.py를 찾을 수 없습니다."
     end
 
-    keyword_arg = keyword.present? ? "keyword=#{keyword.to_json}" : "keyword=None"
+    safe_keyword = keyword.present? ? keyword.gsub(/[^a-zA-Z0-9\s\-_]/, "").truncate(100) : nil
+    keyword_arg = safe_keyword ? "keyword=#{safe_keyword.to_json}" : "keyword=None"
 
     runner = PythonRunner.new
     output = runner.execute(<<~PYTHON)

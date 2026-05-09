@@ -183,3 +183,4 @@ web/storage/*.sqlite3
 web/log/
 web/config/master.key
 web/node_modules/
+web/db/development.sqlite3

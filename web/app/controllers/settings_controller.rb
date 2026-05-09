@@ -76,6 +76,12 @@ class SettingsController < ApplicationController
       lines << "#{key}=#{value}\n" unless found
     end
 
-    File.write(path, lines.join)
+    require "tempfile"
+
+    Tempfile.create(".env", File.dirname(path)) do |tmp|
+      tmp.write(lines.join)
+      tmp.close
+      FileUtils.mv(tmp.path, path)
+    end
   end
 end

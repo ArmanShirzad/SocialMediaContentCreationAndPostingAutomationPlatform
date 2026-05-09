@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_021826) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_09_030000) do
   create_table "articles", force: :cascade do |t|
     t.text "content"
     t.datetime "crawl_datetime"
@@ -26,6 +26,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_021826) do
     t.string "translated_title"
     t.datetime "updated_at", null: false
     t.string "url"
+    t.index ["posted_to_instagram"], name: "index_articles_on_posted_to_instagram"
+    t.index ["posted_to_telegram"], name: "index_articles_on_posted_to_telegram"
+    t.index ["posted_to_x"], name: "index_articles_on_posted_to_x"
+    t.index ["translated_title"], name: "index_articles_on_translated_title"
     t.index ["url"], name: "index_articles_on_url", unique: true
   end
 end

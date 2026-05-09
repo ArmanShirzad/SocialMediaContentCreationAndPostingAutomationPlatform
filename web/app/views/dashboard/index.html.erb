@@ -19,7 +19,7 @@
   </div>
   <div class="bg-surface border border-border rounded-lg p-5">
     <div class="text-[13px] text-text-muted mb-2">번역 완료</div>
-    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight"><%= Article.where.not(translated_title: [nil, ""]).count %></div>
+    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight"><%= @translated %></div>
   </div>
 </div>
 

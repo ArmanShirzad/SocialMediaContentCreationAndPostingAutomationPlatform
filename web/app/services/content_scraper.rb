@@ -9,7 +9,9 @@ class ContentScraper
     response = fetch(uri)
     raise "페이지를 불러올 수 없습니다: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-    doc = Nokogiri::HTML(response.body)
+    body = response.body
+    body = body.encode("UTF-8", invalid: :replace, undef: :replace, replace: "") unless body.valid_encoding?
+    doc = Nokogiri::HTML(body)
 
     {
       title: extract_title(doc),

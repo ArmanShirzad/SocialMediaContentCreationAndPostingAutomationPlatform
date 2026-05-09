@@ -55,10 +55,29 @@ class GoogleNewsService
   def extract_real_url(google_url)
     return google_url unless google_url&.include?("news.google.com")
 
+    # Try query param extraction first (?url=...)
     uri = URI(google_url)
-    params = URI.decode_www_form(uri.query || "")
-    url_param = params.find { |k, _| k == "url" }
-    url_param ? url_param[1] : google_url
+    if uri.query
+      params = URI.decode_www_form(uri.query)
+      url_param = params.find { |k, _| k == "url" }
+      return url_param[1] if url_param
+    end
+
+    # Google News RSS links are proxied — follow redirect to get real URL
+    begin
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 5
+      http.read_timeout = 5
+      cert_path = %w[/etc/ssl/cert.pem /usr/local/etc/openssl@3/cert.pem].find { |p| File.exist?(p) }
+      http.ca_file = cert_path if cert_path
+      response = http.head(uri.request_uri)
+      return response["location"] if response.is_a?(Net::HTTPRedirection) && response["location"]
+    rescue
+      # fall through
+    end
+
+    google_url
   rescue
     google_url
   end

@@ -33,6 +33,13 @@ class PythonRunner
   end
 
   def build_post_script(article, platform)
+    title = article.translated_title.to_s
+    content = article.translated_content.to_s
+    summary = (article.summary || content).truncate(200)
+    image = article.image_url.to_s
+
+    raise "번역이 완료되지 않은 기사입니다." if title.blank?
+
     case platform
     when "telegram"
       <<~PYTHON
@@ -45,9 +52,9 @@ class PythonRunner
         async def post():
             poster = TelegramPoster()
             result = await poster.post_to_channel(
-                title=#{article.translated_title.to_json},
-                content=#{article.translated_content.to_json},
-                image_url=#{article.image_url.to_json}
+                title=#{title.to_json},
+                content=#{content.to_json},
+                image_url=#{image.to_json}
             )
             print(json.dumps({"success": result is not None}))
 
@@ -70,7 +77,7 @@ class PythonRunner
         from test_x_posting import XPoster
 
         poster = XPoster()
-        text = #{(article.translated_title.to_s + "\n\n" + (article.summary || article.translated_content.to_s).truncate(200)).to_json}
+        text = #{(title + "\n\n" + summary).to_json}
         result = poster.post_tweet_with_image(text=text, image_path=None)
         print(json.dumps({"success": result}))
       PYTHON

@@ -1,11 +1,15 @@
 class CardNewsController < ApplicationController
   def new
-    @articles = Article.where.not(translated_title: [nil, ""]).recent
+    @articles = Article.where.not(translated_title: [nil, ""]).recent.limit(100)
     @article = if params[:article_id]
                  Article.find(params[:article_id])
                else
                  @articles.first
                end
+    # pipeline으로 온 기사가 리스트에 없으면 추가
+    if @article && !@articles.exists?(id: @article.id)
+      @articles = Article.where(id: @articles.select(:id)).or(Article.where(id: @article.id)).recent
+    end
     @generated_image = latest_image_for(@article) if @article
     @from_pipeline = params[:from_pipeline].present?
   end

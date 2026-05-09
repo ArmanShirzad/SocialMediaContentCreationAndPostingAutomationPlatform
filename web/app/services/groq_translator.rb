@@ -33,6 +33,8 @@ class GroqTranslator
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.read_timeout = 30
+    cert_path = %w[/etc/ssl/cert.pem /usr/local/etc/openssl@3/cert.pem].find { |p| File.exist?(p) }
+    http.ca_file = cert_path if cert_path
 
     request = Net::HTTP::Post.new(uri)
     request["Authorization"] = "Bearer #{@api_key}"

@@ -6,6 +6,10 @@ class SearchController < ApplicationController
     if @keyword.present?
       service = GoogleNewsService.new
       @results = service.search(@keyword)
+      urls = @results.map { |r| r[:url] }
+      @existing_articles = Article.where(url: urls).index_by(&:url)
+    else
+      @existing_articles = {}
     end
   end
 

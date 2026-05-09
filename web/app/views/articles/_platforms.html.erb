@@ -1,35 +1,33 @@
-<%= turbo_frame_tag "platforms" do %>
-  <div class="bg-surface border border-border rounded-lg p-6">
-    <h2 class="text-[11px] font-semibold text-text-dim uppercase tracking-wider mb-4">플랫폼 포스팅</h2>
-    <div class="grid grid-cols-3 gap-4">
-      <% %w[instagram telegram x].each do |platform| %>
-        <div class="bg-bg border border-border-subtle rounded-lg p-4">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-sm font-semibold"><%= platform.capitalize %></span>
-            <% posted = article.send("posted_to_#{platform}?") %>
-            <% if posted %>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success-muted text-success">
-                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>완료
-              </span>
-            <% else %>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[rgba(161,161,170,0.12)] text-text-muted">
-                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>대기
-              </span>
-            <% end %>
-          </div>
-          <% unless posted %>
-            <% if article.translated? %>
-              <%= link_to post_to_platform_article_path(article, platform: platform),
-                  data: { turbo_method: :post, turbo_confirm: "#{platform.capitalize}에 포스팅하시겠습니까?" },
-                  class: "w-full inline-flex items-center justify-center px-3 py-2 rounded-md text-[13px] font-semibold bg-surface border border-border hover:bg-surface-hover transition-colors" do %>
-                포스팅
-              <% end %>
-            <% else %>
-              <span class="block w-full text-center px-3 py-2 rounded-md text-[13px] text-text-dim bg-surface border border-border-subtle opacity-50">번역 필요</span>
-            <% end %>
+<div id="platforms" class="bg-surface border border-border rounded-lg p-6">
+  <h2 class="text-[11px] font-semibold text-text-dim uppercase tracking-wider mb-4">플랫폼 포스팅</h2>
+  <div class="grid grid-cols-3 gap-4">
+    <% %w[instagram telegram x].each do |platform| %>
+      <div class="bg-bg border border-border-subtle rounded-lg p-4">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm font-semibold"><%= platform.capitalize %></span>
+          <% posted = article.send("posted_to_#{platform}?") %>
+          <% if posted %>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success-muted text-success">
+              <span class="w-1.5 h-1.5 rounded-full bg-current"></span>완료
+            </span>
+          <% else %>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[rgba(161,161,170,0.12)] text-text-muted">
+              <span class="w-1.5 h-1.5 rounded-full bg-current"></span>대기
+            </span>
           <% end %>
         </div>
-      <% end %>
-    </div>
+        <% unless posted %>
+          <% if article.translated? %>
+            <%= link_to post_to_platform_article_path(article, platform: platform),
+                data: { turbo_method: :post, turbo_confirm: "#{platform.capitalize}에 포스팅하시겠습니까?" },
+                class: "w-full inline-flex items-center justify-center px-3 py-2 rounded-md text-[13px] font-semibold bg-surface border border-border hover:bg-surface-hover transition-colors" do %>
+              포스팅
+            <% end %>
+          <% else %>
+            <span class="block w-full text-center px-3 py-2 rounded-md text-[13px] text-text-dim bg-surface border border-border-subtle opacity-50">번역 필요</span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
