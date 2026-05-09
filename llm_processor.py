@@ -220,7 +220,7 @@ class LLMVideoAssistant:
 
     def generate_video_script(self, instagram_caption: str) -> str:
         """Convert Instagram caption into an engaging 30-second video script"""
-        self.logger.info("script key" + self.api_key)
+        self.logger.info("API key loaded: %s...%s", self.api_key[:4], self.api_key[-4:])
 
 
 

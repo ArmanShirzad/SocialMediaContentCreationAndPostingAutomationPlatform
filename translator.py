@@ -33,7 +33,7 @@ class GroqTranslator:
 
     def translate_to_persian(self, content, max_retries=3):
         """Translate with retry logic and validation."""
-        self.logger.info("transaltion key" + self.api_key)
+        self.logger.info("API key loaded: %s...%s", self.api_key[:4], self.api_key[-4:])
 
         if not content:
             self.logger.error("Empty content provided")
