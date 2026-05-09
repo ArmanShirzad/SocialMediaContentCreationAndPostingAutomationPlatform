@@ -176,3 +176,10 @@ output/
 temp_*.jpg
 temp_*.mp3
 tech_news_videoTEMP_*.mp4
+
+# Rails (web/)
+web/tmp/
+web/storage/*.sqlite3
+web/log/
+web/config/master.key
+web/node_modules/
