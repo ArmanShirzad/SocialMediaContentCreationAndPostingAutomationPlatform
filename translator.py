@@ -18,8 +18,6 @@ class GroqTranslator:
         self.error_patterns = [
             "An unexpected error occurred",
             "Please try again later",
-            "یک خطای غیرمنتظره رخ داد",
-            "لطفاً بعداً دوباره تلاش کنید"
         ]
 
     def _validate_translation(self, translated_text):
@@ -52,16 +50,15 @@ class GroqTranslator:
             "messages": [
                 {
                     "role": "system",
-                    "content": ("you are a professional english to persian translator."
+                    "content": ("you are a professional english to korean translator."
                               '1- "Identify proper nouns (names of people, places, organizations, brands, etc.)."\n'
                               '2- "Do not translate proper nouns."\n'
-                              '3- "Translate the given text to Persian."\n'
-                              '4- "Ensure the translation is human-readable and makes sense in Persian."\n'
-                              '5- "Align the text from right to left (RTL)."\n'
-                              '6- "Unless for Proper Nouns, do not include any English words."\n'
-                              '7- "Only provide the translated content."\n'
-                              '8- "Format for Telegram compatibility with appropriate emojis."\n'
-                              '9- "Maintain the original tone while being culturally relevant."\n')
+                              '3- "Translate the given text to Korean."\n'
+                              '4- "Ensure the translation is human-readable and makes sense in Korean."\n'
+                              '5- "Do not include any English words unless they are proper nouns."\n'
+                              '6- "Only provide the translated content."\n'
+                              '7- "Format for Telegram compatibility with appropriate emojis."\n'
+                              '8- "Maintain the original tone while being culturally relevant."\n')
                 },  
                 {
                     "role": "user",
@@ -117,7 +114,7 @@ class GroqTranslator:
                     "role": "system",
                     "content": ("you are a professional text editor.\n"
                                 "1- 'Identify all proper nouns such as company names, person names, and specific named entities.'\n"
-                                "2- 'if there's any proper nouns translated to persian make sure they are in English and the rest can stay persian (the translated language).'\n"
+                                "2- 'if there's any proper nouns translated to korean make sure they are in English and the rest can stay korean (the translated language).'\n"
                                 "3- 'Preserve the context and ensure emojis remain intact.'\n"
                                 "4- 'Provide a final formatted response that maintains the text's original meaning and tone.'\n"
                                 "5- 'Do not add explanations, only return the processed text.'")
@@ -167,7 +164,7 @@ class GroqTranslator:
                     "content": ("You are a content summarizer specialized in maintaining key information while reducing text length.\n"
                               f"Summarize the following text to be under {max_chars} characters while:\n"
                               "1- Maintaining key information and proper nouns\n"
-                              "2- Preserving the Persian language quality\n"
+                              "2- Preserving the Korean language quality\n"
                               "3- Keeping essential emojis\n"
                               "4- Ensuring the summary is coherent and engaging"
                               "5- make sure your response do not include any english explaination and jus provide the final answer only."

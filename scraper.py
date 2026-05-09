@@ -31,9 +31,13 @@ class TechCrunchScraper:
                 print(f"Failed to initialize driver, attempt {attempt + 1}/{max_retries}")
                 time.sleep(2)
 
-    def scrape_articles(self, limit=20):
-        # Open TechCrunch latest page
-        self.driver.get("https://techcrunch.com/latest")
+    def scrape_articles(self, limit=20, keyword=None):
+        if keyword:
+            url = f"https://techcrunch.com/?s={keyword}"
+        else:
+            url = "https://techcrunch.com/latest"
+
+        self.driver.get(url)
         self.driver.implicitly_wait(10)
 
         # Accept cookie popup
