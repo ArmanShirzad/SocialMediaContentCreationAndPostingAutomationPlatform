@@ -13,13 +13,6 @@ class TelegramPoster:
         # Setup logging
         self.logger = logging.getLogger(__name__)
         
-        self.error_patterns = [
-            "An unexpected error occurred",
-            "Please try again later",
-            "یک خطای غیرمنتظره رخ داد",
-            "لطفاً بعداً دوباره تلاش کنید"
-        ]
-
         self.MAX_CAPTION_LENGTH = 1024  # Telegram's limit for photo captions
         self.MAX_MESSAGE_LENGTH = 4096  # Telegram's limit for text messages
 
@@ -92,11 +85,3 @@ class TelegramPoster:
                 if i == retries - 1:
                     raise
                 await asyncio.sleep(2)
-
-    def _escape_markdown(self, text):
-        """Escape special characters for MarkdownV2"""
-        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-        escaped_text = text
-        for char in special_chars:
-            escaped_text = escaped_text.replace(char, f'\\{char}')
-        return escaped_text

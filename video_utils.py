@@ -208,12 +208,6 @@ class VideoGenerator:
             # Create final video
             final_video = concatenate_videoclips(clips, method="compose")
             
-            # Add subtitles if content is provided
-            #if content:
-             #   subtitles = self._create_subtitles(content, video_duration, len(images))
-              #  if subtitles:
-               #     final_video = CompositeVideoClip([final_video, subtitles])
-
             # Add audio
             final_video = final_video.with_audio(audio)
             

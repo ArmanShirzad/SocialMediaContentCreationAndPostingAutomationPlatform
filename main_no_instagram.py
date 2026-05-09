@@ -6,7 +6,6 @@ from test_x_posting import XPoster
 from translator import GroqTranslator
 # from chatgptTranslator import ChatGPTTranslator
 from database import ArticleDatabase
-from logger import log_to_file
 import os
 import aiohttp
 import time
@@ -25,18 +24,6 @@ async def main():
     video_generator = VideoGenerator()
     llm_assistant = LLMVideoAssistant(api_key=os.environ.get('GROQ_API_KEY'))
     x_poster = XPoster()  # Initialize X poster
-
-    # Add these error patterns at the top of main()
-    error_patterns = [
-        "An unexpected error occurred",
-        "Please try again later",
-        "یک خطای غیرمنتظره رخ داد",
-        "لطفاً بعداً دوباره تلاش کنید"
-    ]
-
-    def contains_error_message(text):
-        """Check if the text contains any error patterns"""
-        return any(pattern in text for pattern in error_patterns)
 
     try:
         # Add retry mechanism for scraping
@@ -188,49 +175,6 @@ async def main():
                         print(f"Error posting to X: {type(e).__name__} - {str(e)}")
                         if hasattr(e, 'response') and hasattr(e.response, 'text'):
                             print(f"X API Response: {e.response.text}")
-
-                # Only proceed to video generation and YouTube if both Telegram and X succeeded
-                if telegram_success and x_success:
-                    # First, try video generation with original English content
-                    original_content = f"{article_data['title']}\n\n{article_data['content']}"
-                    try:
-                        print(f"Generating video script for: {url}")
-                        video_script = llm_assistant.generate_video_script(original_content)
-                        if video_script:
-                            print("Video script generated, creating video...")
-                            video_path = await video_generator.generate_video(
-                                content=video_script,
-                                use_videos=False,
-                                total_duration=30,
-                                show_text=True
-                            )
-                            
-                            if video_path:
-                                print("Video generated, uploading to YouTube...")
-                                youtube_uploader = YouTubeUploader()
-                                youtube_response = youtube_uploader.upload_video(
-                                    video_path=video_path,
-                                    title=f"Tech News: {article_data['title'][:50]}...",
-                                    description=original_content[:500]
-                                )
-                                
-                                if youtube_response:
-                                    print(f"Successfully uploaded to YouTube: {youtube_response['id']}")
-                                    db.mark_as_posted(url, 'youtube')
-                                else:
-                                    print("Failed to upload to YouTube")
-                                
-                                if os.path.exists(video_path):
-                                    os.remove(video_path)
-                            else:
-                                print("Failed to generate video")
-                        else:
-                            print("Failed to generate video script")
-                        
-                    except Exception as video_error:
-                        print(f"Error in video processing: {video_error}")
-                else:
-                    print(f"Skipping video generation and YouTube upload for {url} because Telegram or X post failed.")
 
             except Exception as e:
                 print(f"Error processing article {url}: {e}")

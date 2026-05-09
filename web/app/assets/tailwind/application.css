@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0A0A0A;
+  --color-surface: #171717;
+  --color-surface-hover: #1E1E1E;
+  --color-border: #262626;
+  --color-border-subtle: #1F1F1F;
+  --color-text: #FAFAFA;
+  --color-text-muted: #A1A1AA;
+  --color-text-dim: #71717A;
+  --color-accent: #D4A574;
+  --color-accent-hover: #E0B88A;
+  --color-accent-muted: #d4a57426;
+  --color-success: #4ADE80;
+  --color-success-muted: rgba(74, 222, 128, 0.15);
+  --color-error: #F87171;
+  --color-error-muted: rgba(248, 113, 113, 0.15);
+  --color-warning: #FBBF24;
+  --color-warning-muted: rgba(251, 191, 36, 0.15);
+  --color-info: #60A5FA;
+  --color-info-muted: rgba(96, 165, 250, 0.15);
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@layer base {
+  *:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 100;
+    padding: 8px 16px;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

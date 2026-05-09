@@ -1,0 +1,83 @@
+<div class="mb-8">
+  <h1 class="text-2xl font-bold tracking-tight mb-1">대시보드</h1>
+  <p class="text-sm text-text-muted">오늘의 콘텐츠 자동화 현황</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-4 gap-4 mb-8">
+  <div class="bg-surface border border-border rounded-lg p-5">
+    <div class="text-[13px] text-text-muted mb-2">전체 기사</div>
+    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight"><%= @total %></div>
+  </div>
+  <div class="bg-surface border border-border rounded-lg p-5">
+    <div class="text-[13px] text-text-muted mb-2">포스팅 완료</div>
+    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight text-success"><%= @posted %></div>
+  </div>
+  <div class="bg-surface border border-border rounded-lg p-5">
+    <div class="text-[13px] text-text-muted mb-2">대기중</div>
+    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight text-warning"><%= @pending %></div>
+  </div>
+  <div class="bg-surface border border-border rounded-lg p-5">
+    <div class="text-[13px] text-text-muted mb-2">번역 완료</div>
+    <div class="text-[28px] font-bold font-mono tabular-nums tracking-tight"><%= @translated %></div>
+  </div>
+</div>
+
+<!-- Recent Articles Table -->
+<div class="bg-surface border border-border rounded-lg overflow-hidden">
+  <div class="flex justify-between items-center px-5 py-4 border-b border-border">
+    <span class="text-[15px] font-semibold">최근 기사</span>
+    <div class="flex gap-2 items-center">
+      <%= form_tag articles_path, method: :get, class: "inline" do %>
+        <input name="q" placeholder="기사 검색..." class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text placeholder-text-dim outline-none focus:border-accent w-[220px]">
+      <% end %>
+      <%= form_tag scrape_path, method: :post, class: "inline-flex items-center gap-2" do %>
+        <input name="keyword" placeholder="키워드 (예: AI, Apple)" class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text placeholder-text-dim outline-none focus:border-accent w-[180px]">
+        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors whitespace-nowrap">
+          + 스크래핑
+        </button>
+      <% end %>
+    </div>
+  </div>
+
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">기사 제목</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">상태</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">플랫폼</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">날짜</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @recent_articles.each do |article| %>
+        <tr class="hover:bg-surface-hover group">
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <%= link_to article.translated_title.presence || article.title,
+                article_path(article),
+                class: "font-medium text-text hover:text-accent transition-colors max-w-[320px] block truncate" %>
+          </td>
+          <td class="px-5 py-3.5 border-b border-border-subtle"><%= status_badge(article) %></td>
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <div class="flex gap-1.5">
+              <%= platform_icon(article.posted_to_instagram?, "IG") %>
+              <%= platform_icon(article.posted_to_telegram?, "TG") %>
+              <%= platform_icon(article.posted_to_x?, "X") %>
+            </div>
+          </td>
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <span class="font-mono text-[13px] text-text-dim tabular-nums"><%= article.created_at&.strftime("%Y-%m-%d") %></span>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if @recent_articles.empty? %>
+        <tr>
+          <td colspan="4" class="px-5 py-12 text-center text-text-dim text-sm">
+            기사가 없습니다. "새 기사 스크래핑" 버튼을 눌러 시작하세요.
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

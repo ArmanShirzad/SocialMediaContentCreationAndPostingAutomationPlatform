@@ -1,8 +1,10 @@
+import logging
 import sqlite3
 from datetime import datetime
 
 class ArticleDatabase:
     def __init__(self, db_name="articles.db"):
+        self.logger = logging.getLogger(__name__)
         self.conn = sqlite3.connect(db_name)
         self.conn.execute("PRAGMA foreign_keys = ON;")
         self.ensure_schema()
@@ -173,7 +175,7 @@ class ArticleDatabase:
             self.conn.commit()
             return self.conn.total_changes > 0
         except Exception as e:
-            print(f"Error marking for Instagram posting: {e}")
+            self.logger.error(f"Error marking for Instagram posting: {e}")
             return False
 
     def mark_as_posted_instagram(self, url, success=True):
@@ -193,7 +195,7 @@ class ArticleDatabase:
             """, (posted_val, datetime.now().isoformat(), url))
             self.conn.commit()
         except Exception as e:
-            print(f"Error marking as posted to Instagram: {e}")
+            self.logger.error(f"Error marking as posted to Instagram: {e}")
 
     def get_instagram_attempts(self, url):
         query = "SELECT instagram_attempts FROM articles WHERE url = ?"

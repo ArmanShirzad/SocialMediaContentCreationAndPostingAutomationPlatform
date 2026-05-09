@@ -31,9 +31,13 @@ class TechCrunchScraper:
                 print(f"Failed to initialize driver, attempt {attempt + 1}/{max_retries}")
                 time.sleep(2)
 
-    def scrape_articles(self, limit=20):
-        # Open TechCrunch latest page
-        self.driver.get("https://techcrunch.com/latest")
+    def scrape_articles(self, limit=20, keyword=None):
+        if keyword:
+            url = f"https://techcrunch.com/?s={keyword}"
+        else:
+            url = "https://techcrunch.com/latest"
+
+        self.driver.get(url)
         self.driver.implicitly_wait(10)
 
         # Accept cookie popup
@@ -51,7 +55,7 @@ class TechCrunchScraper:
             accept_button.click()
             print("Cookie consent accepted (Didomi).")
             return
-        except:
+        except Exception:
             pass  # Not found, try new popup
 
         # New popup (OneTrust/FC)
@@ -90,14 +94,14 @@ class TechCrunchScraper:
             try:
                 image_element = self.driver.find_element(By.CSS_SELECTOR, '.wp-block-post-featured-image img')
                 image_url = image_element.get_attribute('src')
-            except:
+            except Exception:
                 image_url = None
 
             # Get post date from <time>
             try:
                 date_element = self.driver.find_element(By.TAG_NAME, 'time')
                 post_datetime = date_element.get_attribute('datetime')
-            except:
+            except Exception:
                 post_datetime = None
 
             return {
@@ -108,69 +112,6 @@ class TechCrunchScraper:
                 "image_url": image_url,
                 "crawl_datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
-        except Exception as e:
-            print(f"Error scraping {url}: {e}")
-            return None
-
-    def extract_article_data_v2(self, url):
-        """Extract article data using updated TechCrunch selectors"""
-        self.driver.get(url)
-        self.driver.implicitly_wait(10)
-        
-        # Accept cookie on article page
-        self.accept_cookie_popup()
-        
-        try:
-            # 1. Title
-            title_element = self.driver.find_element(By.CSS_SELECTOR, ".wp-block-post-title")
-            title = title_element.text
-            
-            # 2. Posted Date
-            try:
-                date_element = self.driver.find_element(By.CSS_SELECTOR, ".wp-block-post-date > time")
-                post_datetime = date_element.get_attribute("datetime")
-            except:
-                post_datetime = None
-            
-            # 3. Featured Image
-            try:
-                image_element = self.driver.find_element(By.CSS_SELECTOR, ".wp-block-post-featured-image img")
-                image_url = image_element.get_attribute("src")
-            except:
-                image_url = None
-            
-            # 4. Author
-            try:
-                author_element = self.driver.find_element(By.CSS_SELECTOR, ".post-authors-list__author")
-                author = author_element.text
-            except:
-                author = None
-            
-            # 5. Content (all paragraphs)
-            content_elements = self.driver.find_elements(By.CSS_SELECTOR, ".entry-content p")
-            full_article_content = " ".join([element.text for element in content_elements])
-            
-            # 6. Tags
-            try:
-                tag_elements = self.driver.find_elements(By.CSS_SELECTOR, ".tc23-post-relevant-terms__terms a")
-                tags = [tag.text for tag in tag_elements]
-            except:
-                tags = []
-
-            print(f"Scraped article: {title}")
-            print(f"Content length: {len(full_article_content)} characters")
-            
-            return {
-                "title": title,
-                "url": url,
-                "content": full_article_content,
-                "post_datetime": post_datetime,
-                "image_url": image_url,
-                "author": author,
-                "tags": tags,
-                "crawl_datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            
         except Exception as e:
             print(f"Error scraping {url}: {e}")
             return None

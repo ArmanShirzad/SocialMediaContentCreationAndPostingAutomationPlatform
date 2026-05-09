@@ -1,0 +1,35 @@
+pending_article:
+  title: "AI Startup Raises $50M in Series B"
+  content: "An artificial intelligence startup announced today that it has raised $50 million in a Series B funding round."
+  url: "https://techcrunch.com/2026/05/01/ai-startup-series-b"
+  posted_to_telegram: false
+  posted_to_instagram: false
+  posted_to_x: false
+  created_at: <%= 2.days.ago.iso8601 %>
+  updated_at: <%= 2.days.ago.iso8601 %>
+
+partial_article:
+  title: "New Privacy Law Takes Effect in EU"
+  content: "The European Union's latest privacy regulation went into effect today, impacting tech companies worldwide."
+  url: "https://techcrunch.com/2026/05/02/eu-privacy-law"
+  translated_title: "EU에서 새로운 개인정보 보호법 시행"
+  translated_content: "유럽연합의 최신 개인정보 보호 규정이 오늘 시행되어 전 세계 기술 기업에 영향을 미치고 있습니다."
+  summary: "EU 새 개인정보 보호법 시행, 전 세계 기술 기업에 영향"
+  posted_to_telegram: true
+  posted_to_instagram: false
+  posted_to_x: false
+  created_at: <%= 1.day.ago.iso8601 %>
+  updated_at: <%= 1.day.ago.iso8601 %>
+
+completed_article:
+  title: "Apple Launches New MacBook Pro"
+  content: "Apple today unveiled its latest MacBook Pro lineup featuring the M5 chip with significant performance improvements."
+  url: "https://techcrunch.com/2026/05/03/apple-macbook-pro-m5"
+  translated_title: "애플, 새로운 맥북 프로 출시"
+  translated_content: "애플이 오늘 M5 칩을 탑재한 최신 맥북 프로 라인업을 공개했으며, 상당한 성능 향상을 보여줍니다."
+  summary: "애플 M5 칩 탑재 새 맥북 프로 출시, 성능 대폭 향상"
+  posted_to_telegram: true
+  posted_to_instagram: true
+  posted_to_x: true
+  created_at: <%= Time.current.iso8601 %>
+  updated_at: <%= Time.current.iso8601 %>
