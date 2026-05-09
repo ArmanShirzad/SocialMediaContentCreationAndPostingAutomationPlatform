@@ -1,0 +1,24 @@
+<%= turbo_frame_tag "translation" do %>
+  <div class="bg-surface border border-border rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-[11px] font-semibold text-text-dim uppercase tracking-wider">번역</h2>
+      <% unless article.translated? %>
+        <%= link_to translate_article_path(article), data: { turbo_method: :post }, class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors" do %>
+          번역하기
+        <% end %>
+      <% end %>
+    </div>
+    <% if article.translated? %>
+      <h3 class="font-semibold mb-2"><%= article.translated_title %></h3>
+      <p class="text-sm text-text-muted leading-relaxed"><%= article.translated_content&.truncate(800) %></p>
+      <% if article.summary.present? %>
+        <div class="mt-4 pt-4 border-t border-border-subtle">
+          <h4 class="text-[11px] font-semibold text-text-dim uppercase tracking-wider mb-2">요약</h4>
+          <p class="text-sm text-text-muted"><%= article.summary %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-text-dim">아직 번역되지 않았습니다.</p>
+    <% end %>
+  </div>
+<% end %>

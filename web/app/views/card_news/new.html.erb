@@ -1,0 +1,133 @@
+<div class="mb-8">
+  <div class="flex items-center gap-3 mb-1">
+    <%= link_to "← 검색으로", search_path, class: "text-sm text-text-muted hover:text-text transition-colors" %>
+  </div>
+  <h1 class="text-2xl font-bold tracking-tight mb-1">카드뉴스 생성</h1>
+  <p class="text-sm text-text-muted">내용을 확인하고 이미지를 생성하세요</p>
+</div>
+
+<% if @from_pipeline %>
+  <div class="mb-6 px-4 py-3 rounded-md bg-success-muted text-success text-sm">
+    기사 수집 + 번역이 완료되었습니다. 내용을 확인하고 "이미지 생성"을 누르세요.
+  </div>
+<% end %>
+
+<div class="grid grid-cols-[1fr_380px] gap-8" data-controller="card-preview">
+  <!-- Editor -->
+  <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-1.5">
+      <label for="article-select" class="text-[13px] font-semibold text-text-muted">기사 선택</label>
+      <select id="article-select"
+              onchange="window.location.href='?article_id=' + this.value"
+              class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent">
+        <% @articles.each do |a| %>
+          <option value="<%= a.id %>" <%= "selected" if @article&.id == a.id %>>
+            <%= a.translated_title.presence || a.title %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+
+    <% if @article %>
+      <%= form_tag card_news_path, method: :post do %>
+        <%= hidden_field_tag :article_id, @article.id %>
+
+        <div class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label for="card-title" class="text-[13px] font-semibold text-text-muted">번역된 제목</label>
+            <input id="card-title"
+                   name="translated_title"
+                   value="<%= @article.translated_title %>"
+                   data-card-preview-target="title"
+                   data-action="input->card-preview#update"
+                   class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent">
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="card-summary" class="text-[13px] font-semibold text-text-muted">요약 내용</label>
+            <textarea id="card-summary"
+                      name="summary"
+                      rows="4"
+                      data-card-preview-target="summary"
+                      data-action="input->card-preview#update"
+                      class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent resize-y"><%= @article.summary.presence || @article.translated_content&.truncate(300) %></textarea>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="card-content" class="text-[13px] font-semibold text-text-muted">전체 번역 내용</label>
+            <textarea id="card-content"
+                      name="translated_content"
+                      rows="6"
+                      class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent resize-y"><%= @article.translated_content %></textarea>
+          </div>
+
+          <div class="flex gap-2">
+            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors">
+              저장
+            </button>
+            <%= link_to generate_image_card_news_path(article_id: @article.id),
+                data: { turbo_method: :post },
+                class: "inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-surface border border-border text-text hover:bg-surface-hover transition-colors" do %>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              이미지 생성
+            <% end %>
+            <% if @generated_image %>
+              <%= link_to download_image_card_news_path(article_id: @article.id),
+                  class: "inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-success-muted text-success hover:opacity-80 transition-colors" do %>
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                다운로드
+              <% end %>
+            <% end %>
+            <% if @article.translated? %>
+              <%= link_to post_to_platform_article_path(@article, platform: "instagram"),
+                  data: { turbo_method: :post, turbo_confirm: "Instagram에 포스팅하시겠습니까?" },
+                  class: "inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-surface border border-border text-text hover:bg-surface-hover transition-colors" do %>
+                Instagram 포스팅
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bg-surface border border-border rounded-lg p-12 text-center">
+        <p class="text-text-dim text-sm mb-4">번역된 기사가 없습니다.</p>
+        <%= link_to search_path, class: "inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors" do %>
+          뉴스 검색하러 가기
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Preview Column -->
+  <div class="flex flex-col gap-5">
+    <!-- Live Preview -->
+    <div class="bg-surface border border-border rounded-xl p-4 flex flex-col items-center">
+      <div class="text-[12px] text-text-dim uppercase tracking-wider font-semibold mb-4 text-center">Instagram Preview</div>
+      <div class="w-[320px] bg-white rounded-xl overflow-hidden" style="aspect-ratio: 4/5;">
+        <div class="h-3/5 flex flex-col justify-end p-6" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+          <div class="text-[11px] font-bold uppercase tracking-wider mb-3" style="color: #D4A574;">Tech News</div>
+          <div class="text-[20px] font-extrabold text-white leading-tight tracking-tight" data-card-preview-target="previewTitle">
+            <%= @article&.translated_title || "제목을 입력하세요" %>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="text-[13px] leading-relaxed mb-4" style="color: #555;" data-card-preview-target="previewSummary">
+            <%= @article&.summary&.truncate(150) || @article&.translated_content&.truncate(150) || "요약 내용이 여기에 표시됩니다" %>
+          </div>
+        </div>
+        <div class="flex justify-between items-center px-5 pb-4">
+          <span class="text-[11px] font-semibold" style="color: #999;">ContentFlow</span>
+          <span class="text-[11px] font-mono" style="color: #bbb;"><%= Date.today.strftime("%Y.%m.%d") %></span>
+        </div>
+      </div>
+    </div>
+
+    <% if @generated_image %>
+      <!-- Generated Image -->
+      <div class="bg-surface border border-border rounded-xl p-4 flex flex-col items-center">
+        <div class="text-[12px] text-text-dim uppercase tracking-wider font-semibold mb-4 text-center">Generated Image</div>
+        <%= image_tag image_card_news_path(article_id: @article.id), class: "w-[320px] rounded-lg", alt: "생성된 카드뉴스 이미지" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="mb-8">
+  <h1 class="text-2xl font-bold tracking-tight mb-1">설정</h1>
+  <p class="text-sm text-text-muted">API 키 및 자동화 설정</p>
+</div>
+
+<%= form_tag settings_path, method: :patch do %>
+  <div class="space-y-6 max-w-2xl">
+
+    <!-- Groq API -->
+    <div class="bg-surface border border-border rounded-lg p-6">
+      <h2 class="text-sm font-semibold mb-1">Groq API</h2>
+      <p class="text-[12px] text-text-dim mb-4">번역 및 요약용 LLM 서비스</p>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[13px] font-semibold text-text-muted">GROQ_API_KEY</label>
+        <input name="settings[GROQ_API_KEY]" value="<%= @settings['GROQ_API_KEY'] %>"
+               type="password" autocomplete="off"
+               class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent font-mono"
+               placeholder="<%= @settings['GROQ_API_KEY'].present? ? '••••••••' : '키를 입력하세요' %>">
+      </div>
+    </div>
+
+    <!-- Pexels API -->
+    <div class="bg-surface border border-border rounded-lg p-6">
+      <h2 class="text-sm font-semibold mb-1">Pexels API</h2>
+      <p class="text-[12px] text-text-dim mb-4">스톡 이미지 및 비디오</p>
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[13px] font-semibold text-text-muted">PEXELS_API_KEY</label>
+        <input name="settings[PEXELS_API_KEY]" value="<%= @settings['PEXELS_API_KEY'] %>"
+               type="password" autocomplete="off"
+               class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent font-mono">
+      </div>
+    </div>
+
+    <!-- Instagram -->
+    <div class="bg-surface border border-border rounded-lg p-6">
+      <h2 class="text-sm font-semibold mb-1">Instagram</h2>
+      <p class="text-[12px] text-text-dim mb-4">인스타그램 포스팅 계정</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[13px] font-semibold text-text-muted">INSTAGRAM_USERNAME</label>
+          <input name="settings[INSTAGRAM_USERNAME]" value="<%= @settings['INSTAGRAM_USERNAME'] %>"
+                 class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[13px] font-semibold text-text-muted">INSTAGRAM_PASSWORD</label>
+          <input name="settings[INSTAGRAM_PASSWORD]" value="<%= @settings['INSTAGRAM_PASSWORD'] %>"
+                 type="password"
+                 class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent">
+        </div>
+      </div>
+    </div>
+
+    <!-- Telegram -->
+    <div class="bg-surface border border-border rounded-lg p-6">
+      <h2 class="text-sm font-semibold mb-1">Telegram</h2>
+      <p class="text-[12px] text-text-dim mb-4">텔레그램 봇 설정</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[13px] font-semibold text-text-muted">TELEGRAM_BOT_TOKEN</label>
+          <input name="settings[TELEGRAM_BOT_TOKEN]" value="<%= @settings['TELEGRAM_BOT_TOKEN'] %>"
+                 type="password"
+                 class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent font-mono">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[13px] font-semibold text-text-muted">TELEGRAM_CHAT_ID</label>
+          <input name="settings[TELEGRAM_CHAT_ID]" value="<%= @settings['TELEGRAM_CHAT_ID'] %>"
+                 class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent font-mono">
+        </div>
+      </div>
+    </div>
+
+    <!-- X (Twitter) -->
+    <div class="bg-surface border border-border rounded-lg p-6">
+      <h2 class="text-sm font-semibold mb-1">X (Twitter)</h2>
+      <p class="text-[12px] text-text-dim mb-4">X API 인증 정보</p>
+      <div class="grid grid-cols-2 gap-4">
+        <% %w[X_BEARER_TOKEN X_API_KEY X_API_KEY_SECRET X_ACCESS_TOKEN X_ACCESS_TOKEN_SECRET].each do |key| %>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] font-semibold text-text-muted"><%= key %></label>
+            <input name="settings[<%= key %>]" value="<%= @settings[key] %>"
+                   type="password"
+                   class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text outline-none focus:border-accent font-mono">
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <button type="submit" class="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-md text-[13px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors">
+      설정 저장
+    </button>
+  </div>
+<% end %>

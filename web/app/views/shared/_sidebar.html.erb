@@ -1,0 +1,33 @@
+<aside class="bg-bg border-r border-border p-6 flex flex-col gap-2 sticky top-0 h-screen" aria-label="사이드바">
+  <div class="flex items-center gap-2.5 px-3 mb-6">
+    <span class="w-2 h-2 rounded-full bg-accent" aria-hidden="true"></span>
+    <span class="text-lg font-bold tracking-tight">ContentFlow</span>
+  </div>
+
+  <nav aria-label="메인 메뉴">
+    <%= sidebar_link "대시보드", root_path, "grid" %>
+    <%= sidebar_link "뉴스 검색", search_path, "search" %>
+    <%= sidebar_link "기사 관리", articles_path, "file" %>
+    <%= sidebar_link "카드뉴스", new_card_news_path, "layout" %>
+  </nav>
+
+  <div class="text-[11px] font-semibold text-text-dim uppercase tracking-wider px-3 pt-4 pb-2" aria-hidden="true">플랫폼</div>
+  <ul class="flex flex-col gap-0" role="list" aria-label="플랫폼 상태">
+    <li class="flex items-center gap-2.5 px-3 py-2.5 text-text-dim text-sm">
+      <span class="w-2 h-2 rounded-full bg-success" aria-hidden="true"></span>
+      Instagram
+    </li>
+    <li class="flex items-center gap-2.5 px-3 py-2.5 text-text-dim text-sm">
+      <span class="w-2 h-2 rounded-full bg-success" aria-hidden="true"></span>
+      Telegram
+    </li>
+    <li class="flex items-center gap-2.5 px-3 py-2.5 text-text-dim text-sm">
+      <span class="w-2 h-2 rounded-full bg-success" aria-hidden="true"></span>
+      X (Twitter)
+    </li>
+  </ul>
+
+  <nav class="mt-auto pt-4 border-t border-border" aria-label="부가 메뉴">
+    <%= sidebar_link "설정", settings_path, "settings" %>
+  </nav>
+</aside>

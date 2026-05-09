@@ -1,0 +1,78 @@
+<div class="mb-8 flex justify-between items-end">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight mb-1">기사 관리</h1>
+    <p class="text-sm text-text-muted">전체 기사 목록 및 관리</p>
+  </div>
+  <div class="flex gap-2">
+    <%= form_tag articles_path, method: :get, class: "inline" do %>
+      <input name="q" value="<%= params[:q] %>" placeholder="기사 검색..." class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text placeholder-text-dim outline-none focus:border-accent w-[220px]">
+    <% end %>
+    <%= form_tag scrape_path, method: :post, class: "inline-flex items-center gap-2" do %>
+      <input name="keyword" placeholder="키워드 (예: AI, Apple)" class="bg-bg border border-border rounded-md px-3 py-2 text-[13px] text-text placeholder-text-dim outline-none focus:border-accent w-[180px]">
+      <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-[13px] font-semibold bg-accent text-bg hover:bg-accent-hover transition-colors whitespace-nowrap">
+        + 스크래핑
+      </button>
+    <% end %>
+  </div>
+</div>
+
+<div class="bg-surface border border-border rounded-lg overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">기사 제목</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">번역</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">상태</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">플랫폼</th>
+        <th scope="col" class="text-left px-5 py-3 text-[12px] font-semibold text-text-dim uppercase tracking-wider border-b border-border">날짜</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @articles.each do |article| %>
+        <tr class="hover:bg-surface-hover">
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <%= link_to article.title, article_path(article), class: "font-medium text-text hover:text-accent transition-colors max-w-[400px] block truncate" %>
+          </td>
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <% if article.translated? %>
+              <span class="text-success text-xs font-semibold">완료</span>
+            <% else %>
+              <span class="text-text-dim text-xs">미번역</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3.5 border-b border-border-subtle"><%= status_badge(article) %></td>
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <div class="flex gap-1.5">
+              <%= platform_icon(article.posted_to_instagram?, "IG") %>
+              <%= platform_icon(article.posted_to_telegram?, "TG") %>
+              <%= platform_icon(article.posted_to_x?, "X") %>
+            </div>
+          </td>
+          <td class="px-5 py-3.5 border-b border-border-subtle">
+            <span class="font-mono text-[13px] text-text-dim tabular-nums"><%= article.created_at&.strftime("%Y-%m-%d") %></span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <nav class="flex justify-center items-center gap-1 mt-6" aria-label="Pagination">
+    <% if @pagy.prev %>
+      <%= link_to "< 이전", articles_path(page: @pagy.prev, q: params[:q]), class: "px-3 py-2 rounded-md text-sm text-text-muted hover:bg-surface transition-colors" %>
+    <% end %>
+    <% @pagy.series.each do |item| %>
+      <% if item.is_a?(Integer) %>
+        <%= link_to item, articles_path(page: item, q: params[:q]), class: "px-3 py-2 rounded-md text-sm text-text-muted hover:bg-surface transition-colors" %>
+      <% elsif item.is_a?(String) %>
+        <span class="px-3 py-2 rounded-md text-sm font-semibold bg-accent text-bg"><%= item %></span>
+      <% elsif item == :gap %>
+        <span class="px-2 text-text-dim">...</span>
+      <% end %>
+    <% end %>
+    <% if @pagy.next %>
+      <%= link_to "다음 >", articles_path(page: @pagy.next, q: params[:q]), class: "px-3 py-2 rounded-md text-sm text-text-muted hover:bg-surface transition-colors" %>
+    <% end %>
+  </nav>
+<% end %>
