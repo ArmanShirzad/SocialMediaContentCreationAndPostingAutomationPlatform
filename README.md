@@ -1,3 +1,5 @@
+
+
 ![Demo](./assets/SocailMediaAutomationContentandposting.gif)
 # SocialMediaContentCreationAndPostingAutomationPlatform
 
@@ -5,7 +7,7 @@ SocialMediaContentCreationAndPostingAutomationPlatform is an automated content p
 
 ## Features
 - **Automated Scraping:** Fetches the latest articles from a source in this case is the beloved renowned TechCrunch.
-- **Translation:** Translates articles to Persian using LLM-powered translation. u can change just the prompt in groqtranslator.py
+- **Translation:** Translates articles to Persian using LLM-powered translation. You can change the prompt in `translator.py`.
 - **Summarization:** Summarizes content for social media platforms. each have a limit and the limits and constraints are commented. 
 - **Video Generation:** Creates videos from article content using stock images or footage. generated videos can be seen at https://www.youtube.com/@techcrunchfarsi/shorts
 - **audio Generation:** Creates audio voice over from article content using tts feature. explained more at overview of workflow overview section. sample generated audios are like below.
@@ -91,7 +93,7 @@ The platform orchestrates a robust, multi-stage pipeline for automated content c
    - The scraper fetches the most recent articles from TechCrunch, extracting the title, summary, main content, and associated images. Duplicate detection is performed using the database to avoid reposting the same article.
 
 2. **Translate and Summarize Content in Persian**
-   - The content is translated to Persian using an LLM-powered translation engine (Groq API by default). The translation prompt can be customized for other languages or styles in `groqtranslator.py`.
+   - The content is translated to Persian using an LLM-powered translation engine (Groq API by default). The translation prompt can be customized for other languages or styles in `translator.py`.
    - Summarization is performed for each target platform, respecting their specific character limits (e.g., Instagram, Telegram, X/Twitter). Summarization logic is modular and can be adapted for other platforms.
 
 3. **AI Voice Generation (Text-to-Speech)**
